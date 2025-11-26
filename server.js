@@ -1,74 +1,26 @@
 import express from 'express';
-import axios from 'axios';
-import * as cheerio from 'cheerio';
+import cors from 'cors';
+import { lirik } from './lirik.js';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
-async function lirik(query) {
-    try {
-        let res = await axios.get(`http://api.genius.com/search?q=${query}&access_token=QM9gJBlJNIkeljJO2ZE_--FOHQh_D63QxxoOGjS5UQVyugkVxSVl8e8yYwUJadRy`);
-        let hits = res.data.response.hits;
+app.use(cors());
 
-        if (hits.length > 0) {
-            let d = hits[0].result;
-            let options = {
-               method: 'GET',
-               url: 'https://genius-song-lyrics1.p.rapidapi.com/song/lyrics/',
-               params: { id: d.id },
-               headers: {
-                   'x-rapidapi-key': '6d76823bdbmsh03d32d092d169b8p165006jsn3fdc9f9b758f',
-                   'x-rapidapi-host': 'genius-song-lyrics1.p.rapidapi.com'
-               }
-          };
-          let rapid = await axios(options);
-          let $ = cheerio.load(rapid.data.lyrics.lyrics.body.html);
-          let lyric = $('p').text().trim();
+app.get('/api/lirik', async (req, res) => {
+    const { q } = req.query;
 
-          return {
-              status: true,
-              creator: 'Chamod Nimsara',
-              data: {
-                  artist: d.artist_names,
-                  image: d.header_image_thumbnail_url,
-                  title: d.full_title,
-                  release_date: d.release_date_for_display,
-                  lyrics: lyric
-              }
-          };
-        } else {
-            return {
-                status: false,
-                creator: 'Chamod Nimsara',
-                data: {
-                    artist: 'No Name',
-                    image: 'https://telegra.ph/file/e7a4414620ce6da03bb02.jpg',
-                    title: 'Not Found',
-                    release_date: 'N/A',
-                    lyrics: 'Lyrics not found!'
-                }
-            };
-        }
-    } catch (error) {
-        return {
+    if (!q) {
+        return res.json({
             status: false,
-            creator: 'Chamod Nimsara',
-            error: error.message
-        };
+            message: "Please provide ?q=song_name"
+        });
     }
-}
 
-// =====================
-// 📡 API ROUTE
-// =====================
-app.get('/lirik', async (req, res) => {
-    const query = req.query.query;
-    if (!query) return res.json({ status: false, message: "Missing ?query=" });
-    const result = await lirik(query);
+    const result = await lirik(q);
     res.json(result);
 });
 
-// =====================
-// 🌐 SERVER START
-// =====================
-app.listen(PORT, () => console.log(`🎵 Lirik API running on http://localhost:${PORT}`));
+app.listen(PORT, () => {
+    console.log(`API Running on PORT ${PORT}`);
+});
