@@ -4,22 +4,148 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WHITESHADOW Lyrics Finder</title>
-<link rel="stylesheet" href="style.css">
+<style>
+/* === CSS embedded === */
+body{
+  margin:0;
+  font-family: "Poppins", sans-serif;
+  color:#fff;
+  background:#000 url('https://i.imgur.com/zYIlgBl.gif') center/cover fixed;
+  overflow-x:hidden;
+}
+.container{
+  text-align:center;
+  padding:70px 20px;
+}
+.title{
+  font-size:32px;
+  margin-bottom:20px;
+  text-shadow:0 0 10px #00f2ff;
+}
+.input{
+  width:80%;
+  max-width:350px;
+  padding:12px;
+  border:none;
+  border-radius:6px;
+  font-size:16px;
+  outline:none;
+  margin-bottom:10px;
+}
+.btn{
+  padding:12px 20px;
+  background:#00f2ff;
+  color:#000;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+  margin-top:10px;
+  display:inline-block;
+  transition:0.25s;
+}
+.btn:hover{
+  transform:scale(1.08);
+  background:#0ff;
+}
+.result-box{
+  white-space:pre-wrap;
+  background:rgba(0,0,0,0.55);
+  padding:20px;
+  margin-top:20px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.15);
+  text-align:left;
+}
+.hidden { display:none; }
+.song-image{
+  width:100%;
+  max-width:400px;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+.lyrics-box{
+  margin-top:15px;
+  white-space:pre-wrap;
+  background:rgba(0,0,0,0.5);
+  padding:15px;
+  border-radius:8px;
+}
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.65);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  backdrop-filter:blur(5px);
+  padding:20px;
+  z-index:1000;
+}
+.popup-box{
+  background:#111;
+  padding:30px;
+  border-radius:12px;
+  text-align:center;
+  border:1px solid #00f2ff;
+}
+.popup-box .btn{
+  display:block;
+  margin:10px auto;
+  width:80%;
+}
+.close{
+  float:right;
+  cursor:pointer;
+  font-size:26px;
+  margin-top:-10px;
+}
+.footer{
+  width:100%;
+  margin-top:40px;
+  padding:25px 10px;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(8px);
+  border-top:1px solid rgba(255,255,255,0.15);
+}
+.footer-content{text-align:center;}
+.powered{
+  font-size:14px;
+  margin-bottom:12px;
+}
+.powered span{
+  color:#00f2ff;
+  font-weight:bold;
+}
+.social-icons{
+  display:flex;
+  justify-content:center;
+  gap:22px;
+}
+.social-icons img{
+  width:26px;
+  opacity:0.85;
+  filter:invert(100%);
+  transition:.25s;
+}
+.social-icons img:hover{
+  opacity:1;
+  transform:scale(1.15);
+}
+</style>
 </head>
 <body>
 
-<!-- Channel Follow Ad Popup -->
-<div id="adPopup" class="popup">
+<!-- Channel Follow Popup -->
+<div id="adPopup" class="popup hidden">
   <div class="popup-box">
      <span class="close" onclick="closePopup()">&times;</span>
      <h2>Follow Our Channels ❤️</h2>
-
      <a class="btn follow" href="https://whatsapp.com/channel/0029Vb4bj5zI7BeFm6aM8O1p" target="_blank">Follow Channel 1</a>
      <a class="btn follow" href="https://whatsapp.com/channel/0029Vak4dFAHQbSBzyxlGG13" target="_blank">Follow Channel 2</a>
   </div>
 </div>
 
-<!-- Main Container -->
 <div class="container">
   <h1 class="title">WHITESHADOW Lyrics Finder</h1>
 
@@ -36,20 +162,16 @@
   </div>
 </div>
 
-<!-- Footer -->
 <footer class="footer">
     <div class="footer-content">
         <p class="powered">Powered by <span>WHITESHADOW</span> © 2025</p>
-
         <div class="social-icons">
             <a href="https://github.com/cnw-db/Whiteshadow-vx.git" target="_blank">
                 <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub">
             </a>
-
             <a href="https://whatsapp.com/channel/0029Vak4dFAHQbSBzyxlGG13" target="_blank">
                 <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt="WhatsApp">
             </a>
-
             <a href="https://t.me/Whiteshadow_tel_bot" target="_blank">
                 <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/telegram.svg" alt="Telegram">
             </a>
@@ -57,6 +179,44 @@
     </div>
 </footer>
 
-<script src="script.js"></script>
+<script>
+// === JS Embedded ===
+function showPopup(){
+    document.getElementById("adPopup").classList.remove("hidden");
+}
+function closePopup(){
+    document.getElementById("adPopup").classList.add("hidden");
+}
+setTimeout(showPopup, 1500);
+
+async function searchLyrics() {
+    const q = document.getElementById("query").value.trim();
+    if(!q) return alert("Enter song name!");
+    try{
+        const res = await fetch(`/api/lirik?q=${encodeURIComponent(q)}`);
+        const data = await res.json();
+
+        document.getElementById("songImg").src = data.data?.image || '';
+        document.getElementById("songTitle").innerText = data.data?.title || 'Not Found';
+        document.getElementById("songArtist").innerText = 'Artist: ' + (data.data?.artis || 'Unknown');
+        document.getElementById("songRelease").innerText = 'Release: ' + (data.data?.rilis || 'Unknown');
+        document.getElementById("songLyrics").innerText = data.data?.lirik || 'Lyrics Not Found!';
+        document.getElementById("resultBox").classList.remove("hidden");
+        document.getElementById("downloadBtn").style.display="inline-block";
+    }catch(e){
+        console.error(e);
+        alert("Error fetching lyrics!");
+    }
+}
+
+function downloadLyrics(){
+    const text = document.getElementById("songLyrics").innerText;
+    const blob = new Blob([text], { type:"text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = document.getElementById("songTitle").innerText + ".txt";
+    a.click();
+}
+</script>
 </body>
 </html>
