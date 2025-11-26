@@ -1,0 +1,145 @@
+/* Background Animation */
+body{
+  margin:0;
+  font-family: "Poppins", sans-serif;
+  color:#fff;
+  background:#000 url('https://i.imgur.com/zYIlgBl.gif') center/cover fixed;
+  overflow-x:hidden;
+}
+
+/* Container */
+.container{
+  text-align:center;
+  padding:70px 20px;
+}
+
+/* Title */
+.title{
+  font-size:32px;
+  margin-bottom:20px;
+  text-shadow:0 0 10px #00f2ff;
+}
+
+/* Input */
+.input{
+  width:80%;
+  max-width:350px;
+  padding:12px;
+  border:none;
+  border-radius:6px;
+  font-size:16px;
+  outline:none;
+  margin-bottom:10px;
+}
+
+/* Buttons */
+.btn{
+  padding:12px 20px;
+  background:#00f2ff;
+  color:#000;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+  margin-top:10px;
+  display:inline-block;
+  transition:0.25s;
+}
+.btn:hover{
+  transform:scale(1.08);
+  background:#0ff;
+}
+
+/* Result Box */
+.result-box{
+  white-space:pre-wrap;
+  background:rgba(0,0,0,0.55);
+  padding:20px;
+  margin-top:20px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.15);
+  text-align:left;
+}
+.hidden { display:none; }
+
+.song-image{
+  width:100%;
+  max-width:400px;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+
+.lyrics-box{
+  margin-top:15px;
+  white-space:pre-wrap;
+  background:rgba(0,0,0,0.5);
+  padding:15px;
+  border-radius:8px;
+}
+
+/* Popup Ad */
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.65);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  backdrop-filter:blur(5px);
+  padding:20px;
+}
+.popup-box{
+  background:#111;
+  padding:30px;
+  border-radius:12px;
+  text-align:center;
+  border:1px solid #00f2ff;
+}
+.popup-box .btn{
+  display:block;
+  margin:10px auto;
+  width:80%;
+}
+.close{
+  float:right;
+  cursor:pointer;
+  font-size:26px;
+  margin-top:-10px;
+}
+
+/* Footer */
+.footer{
+  width:100%;
+  margin-top:40px;
+  padding:25px 10px;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(8px);
+  border-top:1px solid rgba(255,255,255,0.15);
+}
+
+.footer-content{text-align:center;}
+
+.powered{
+  font-size:14px;
+  margin-bottom:12px;
+}
+.powered span{
+  color:#00f2ff;
+  font-weight:bold;
+}
+
+.social-icons{
+  display:flex;
+  justify-content:center;
+  gap:22px;
+}
+.social-icons img{
+  width:26px;
+  opacity:0.85;
+  filter:invert(100%);
+  transition:.25s;
+}
+.social-icons img:hover{
+  opacity:1;
+  transform:scale(1.15);
+}
