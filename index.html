@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHITESHADOW Lyrics Finder</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Channel Follow Ad Popup -->
+<div id="adPopup" class="popup">
+  <div class="popup-box">
+     <span class="close" onclick="closePopup()">&times;</span>
+     <h2>Follow Our Channels ❤️</h2>
+
+     <a class="btn follow" href="https://whatsapp.com/channel/0029Vb4bj5zI7BeFm6aM8O1p" target="_blank">Follow Channel 1</a>
+     <a class="btn follow" href="https://whatsapp.com/channel/0029Vak4dFAHQbSBzyxlGG13" target="_blank">Follow Channel 2</a>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div class="container">
+  <h1 class="title">WHITESHADOW Lyrics Finder</h1>
+
+  <input type="text" id="query" placeholder="Enter song name..." class="input" />
+  <button class="btn search" onclick="searchLyrics()">Search</button>
+
+  <div id="resultBox" class="result-box hidden">
+      <img id="songImg" class="song-image" src="" alt="Song Image">
+      <h2 id="songTitle"></h2>
+      <h3 id="songArtist"></h3>
+      <p id="songRelease"></p>
+      <pre id="songLyrics" class="lyrics-box"></pre>
+      <button id="downloadBtn" class="btn download" onclick="downloadLyrics()">Download Lyrics (.txt)</button>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <p class="powered">Powered by <span>WHITESHADOW</span> © 2025</p>
+
+        <div class="social-icons">
+            <a href="https://github.com/cnw-db/Whiteshadow-vx.git" target="_blank">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub">
+            </a>
+
+            <a href="https://whatsapp.com/channel/0029Vak4dFAHQbSBzyxlGG13" target="_blank">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt="WhatsApp">
+            </a>
+
+            <a href="https://t.me/Whiteshadow_tel_bot" target="_blank">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/telegram.svg" alt="Telegram">
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
