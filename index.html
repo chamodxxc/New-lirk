@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WHITESHADOW Lyrics Finder</title>
 <style>
-/* === CSS embedded === */
+/* === CSS Embedded === */
 body{
   margin:0;
   font-family: "Poppins", sans-serif;
@@ -71,6 +71,7 @@ body{
   padding:15px;
   border-radius:8px;
 }
+/* Popup */
 .popup{
   position:fixed;
   inset:0;
@@ -80,7 +81,13 @@ body{
   align-items:center;
   backdrop-filter:blur(5px);
   padding:20px;
-  z-index:1000;
+  z-index:10000;
+  opacity:1;
+  transition:opacity 0.3s ease;
+}
+.popup.hidden{
+  display:none;
+  opacity:0;
 }
 .popup-box{
   background:#111;
@@ -88,18 +95,22 @@ body{
   border-radius:12px;
   text-align:center;
   border:1px solid #00f2ff;
+  position:relative;
+}
+.close{
+  position:absolute;
+  top:10px;
+  right:15px;
+  cursor:pointer;
+  font-size:26px;
+  color:#fff;
 }
 .popup-box .btn{
   display:block;
   margin:10px auto;
   width:80%;
 }
-.close{
-  float:right;
-  cursor:pointer;
-  font-size:26px;
-  margin-top:-10px;
-}
+/* Footer */
 .footer{
   width:100%;
   margin-top:40px;
@@ -181,14 +192,19 @@ body{
 
 <script>
 // === JS Embedded ===
+
+// Popup
 function showPopup(){
-    document.getElementById("adPopup").classList.remove("hidden");
+    const popup = document.getElementById("adPopup");
+    popup.classList.remove("hidden");
 }
 function closePopup(){
-    document.getElementById("adPopup").classList.add("hidden");
+    const popup = document.getElementById("adPopup");
+    popup.classList.add("hidden");
 }
 setTimeout(showPopup, 1500);
 
+// Search Lyrics
 async function searchLyrics() {
     const q = document.getElementById("query").value.trim();
     if(!q) return alert("Enter song name!");
@@ -209,6 +225,7 @@ async function searchLyrics() {
     }
 }
 
+// Download Lyrics
 function downloadLyrics(){
     const text = document.getElementById("songLyrics").innerText;
     const blob = new Blob([text], { type:"text/plain" });
