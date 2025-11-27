@@ -18,7 +18,7 @@ async function lirik(query) {
                url: 'https://genius-song-lyrics1.p.rapidapi.com/song/lyrics/',
                params: {id: d.id},
                headers: {
-                   'x-rapidapi-key': '6d76823bdbmsh03d32d092d169b8p165006jsn3fdc9f9b758f',
+                   'x-rapidapi-key': '7a097ad159mshd36d6dc8871d0a4p19abcajsn76810d8dd6b1',
                    'x-rapidapi-host': 'genius-song-lyrics1.p.rapidapi.com'
                }
             };
