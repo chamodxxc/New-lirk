@@ -1,23 +1,28 @@
 const axios = require('axios');
 
 /**
- * Lyrics fetch function
+ * Lyrics fetch function for LRCLib
  * @param {string} title - Song title
- * @returns {Promise<Object>} - Lyrics result object
+ * @returns {Promise<Object>} - Lyrics result object for frontend
  */
-async function lyrics(title) {
+async function lirik(title) {
     try {
         if (!title) {
             return {
                 status: false,
-                message: "Title is required!"
+                message: "Title is required!",
+                data: {
+                    artis: 'Unknown',
+                    image: 'https://telegra.ph/file/e7a4414620ce6da03bb02.jpg',
+                    title: 'Not Found',
+                    rilis: '-',
+                    lirik: 'Lyrics Not Found!'
+                }
             };
         }
 
-        // Encode title for query
         const query = encodeURIComponent(title);
 
-        // Fetch from LRCLib
         const { data } = await axios.get(
             `https://lrclib.net/api/search?q=${query}`,
             {
@@ -29,20 +34,44 @@ async function lyrics(title) {
             }
         );
 
-        // Return in standard format
+        // Pick first result if exists
+        const first = (data?.data && data.data.length > 0) ? data.data[0] : null;
+
+        const result = first
+            ? {
+                  artis: first?.artist || 'Unknown',
+                  image: first?.cover || 'https://telegra.ph/file/e7a4414620ce6da03bb02.jpg',
+                  title: first?.title || 'Not Found',
+                  rilis: first?.release_date || '-',
+                  lirik: first?.lyric || 'Lyrics Not Found!'
+              }
+            : {
+                  artis: 'Unknown',
+                  image: 'https://telegra.ph/file/e7a4414620ce6da03bb02.jpg',
+                  title: 'Not Found',
+                  rilis: '-',
+                  lirik: 'Lyrics Not Found!'
+              };
+
         return {
             status: true,
-            creator: "Chamod Nimsara",
-            result: data
+            creator: 'Chamod Nimsara',
+            data: result
         };
 
     } catch (error) {
         return {
             status: false,
-            message: error.message
+            message: error.message,
+            data: {
+                artis: 'Unknown',
+                image: 'https://telegra.ph/file/e7a4414620ce6da03bb02.jpg',
+                title: 'Not Found',
+                rilis: '-',
+                lirik: 'Lyrics Not Found!'
+            }
         };
     }
 }
 
-// Export CommonJS style for existing server.js / frontend
-module.exports = { lyrics };
+module.exports = { lirik };
