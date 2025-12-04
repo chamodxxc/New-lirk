@@ -1,60 +1,48 @@
-import axios from 'axios';
-import * as cheerio from 'cheerio';
+const axios = require('axios');
 
-async function lirik(query) {
+/**
+ * Lyrics fetch function
+ * @param {string} title - Song title
+ * @returns {Promise<Object>} - Lyrics result object
+ */
+async function lyrics(title) {
     try {
-        let split = query.split(' ');
-        if (split.length > 1) split = split.join('+');
-        
-        let res = await axios.get(`http://api.genius.com/search?q=${query}&access_token=QM9gJBlJNIkeljJO2ZE_--FOHQh_D63QxxoOGjS5UQVyugkVxSVl8e8yYwUJadRy`)
-        
-        let hits = res.data.response.hits;
-
-        if (hits.length > 0) {
-            let d = hits[0].result;
-
-            let options = {
-               method: 'GET',
-               url: 'https://genius-song-lyrics1.p.rapidapi.com/song/lyrics/',
-               params: {id: d.id},
-               headers: {
-                   'x-rapidapi-key': '7a097ad159mshd36d6dc8871d0a4p19abcajsn76810d8dd6b1',
-                   'x-rapidapi-host': 'genius-song-lyrics1.p.rapidapi.com'
-               }
-            };
-
-            let rapid = await axios(options);
-            let $ = await cheerio.load(rapid.data.lyrics.lyrics.body.html);
-
-            let lirik = $('p').text().trim();
-
-            return {
-                status: true,
-                creator: 'Chamod Nimsara',
-                data: {
-                    artis: d.artist_names,
-                    image: d.header_image_thumbnail_url,
-                    title: d.full_title,
-                    rilis: d.release_date_for_display,
-                    lirik: lirik
-                }
-            };
-        } else {
+        if (!title) {
             return {
                 status: false,
-                creator: 'Chamod Nimsara',
-                data: {
-                    artis: 'Unknown',
-                    image: 'https://telegra.ph/file/e7a4414620ce6da03bb02.jpg',
-                    title: 'Not Found',
-                    rilis: '-',
-                    lirik: 'Tidak Ditemukan!'
-                }
+                message: "Title is required!"
             };
         }
-    } catch (err) {
-        return { error: true, message: err.message };
+
+        // Encode title for query
+        const query = encodeURIComponent(title);
+
+        // Fetch from LRCLib
+        const { data } = await axios.get(
+            `https://lrclib.net/api/search?q=${query}`,
+            {
+                headers: {
+                    referer: `https://lrclib.net/search/${query}`,
+                    "user-agent":
+                        "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36"
+                }
+            }
+        );
+
+        // Return in standard format
+        return {
+            status: true,
+            creator: "Chamod Nimsara",
+            result: data
+        };
+
+    } catch (error) {
+        return {
+            status: false,
+            message: error.message
+        };
     }
 }
 
-export { lirik };
+// Export CommonJS style for existing server.js / frontend
+module.exports = { lyrics };
